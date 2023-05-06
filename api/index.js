@@ -27,7 +27,7 @@ const generateAccessToken = (user) => {
       isAdmin: user.isAdmin,
     },
     "mySecretKey",
-    { expiresIn: "1m" }
+    { expiresIn: "10s" }
   );
 };
 
@@ -51,8 +51,7 @@ app.post("/api/refresh", (req, res) => {
 
   jwt.verify(refreshToken, "myRefreshSecretKey", (err, user) => {
     if (err) {
-      console.log(err);
-      return res.status(403).json("Token is not valid!");
+      return res.status(403).json("Token is not valid!!");
     }
     // if everything is OK, create new access token and refresh token, send back to user
     refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
@@ -60,7 +59,6 @@ app.post("/api/refresh", (req, res) => {
     const newRefreshToken = generateRefreshToken(user);
 
     refreshTokens.push(newRefreshToken);
-
     res.status(200).json({
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
